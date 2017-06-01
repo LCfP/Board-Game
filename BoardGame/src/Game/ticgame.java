@@ -5,9 +5,11 @@ package Game;
 	import javax.swing.*;
 	import javax.swing.border.LineBorder;
 	public class ticgame  extends JApplet{
-	 private char whoseTurn='X';
-	 private Cell[][] cells=new Cell[3][3];
-	 private JLabel jlblStatus=new JLabel("X's turn to play");
+	private char whoseTurn='X';
+	private Cell[][] cells=new Cell[3][3];
+	private JLabel jlblStatus=new JLabel("X's turn to play");
+	private JButton resetButton = new JButton("Reset");
+	
 	 
 	 public ticgame(){
 	  JPanel p=new JPanel(new GridLayout(3,3,0,0));
@@ -17,9 +19,32 @@ package Game;
 	  
 	  p.setBorder(new LineBorder(Color.red,1));
 	  jlblStatus.setBorder(new LineBorder(Color.yellow,1));
+	  this.getContentPane().add(resetButton,BorderLayout.NORTH);
 	  this.getContentPane().add(p,BorderLayout.CENTER);
 	  this.getContentPane().add(jlblStatus,BorderLayout.SOUTH); 
+	 
+	 
+	 resetButton.addActionListener(new ActionListener()
+	 {
+		 public void actionPerformed(ActionEvent e)
+		 {
+			 for(int i=0;i<3;i++)
+				 for(int j=0;j<3;j++)
+					cells[i][j].setToken(' ');
+			 jlblStatus.setText("X's turn to play");
+			whoseTurn = 'X';
+		 }
+	 });
 	 }
+	 
+	 public boolean isReset(){
+	   for(int i=0;i<3;i++)
+		 for(int j=0;j<3;j++)
+			if(cells[i][j].getToken()!=' ')
+	    return false;
+	   return true;
+	 }
+	 
 	 
 	 public boolean isFull(){
 	  for(int i=0;i<3;i++)
@@ -56,15 +81,10 @@ package Game;
 	    return true;
 	 }
 	  
-	  if((cells[0][0].getToken()==token)
-	        &&(cells[1][1].getToken()==token)
-	        &&(cells[2][2].getToken()==token)){
-	    return true;
-	 }
-	  
 	  return false;
 	  
 	}
+	 
 	 
 	 public class Cell extends JPanel implements MouseListener{
 	  private char token=' ';
@@ -95,26 +115,29 @@ package Game;
 	  }
 	  
 	  public void mouseClicked(MouseEvent e){
+		
 	   
-	   if(token==' '&&whoseTurn!=' '){
-	    setToken(whoseTurn);
-	    if(isWin(whoseTurn)){
-	     jlblStatus.setText(whoseTurn+"win!The game is over");
-	     whoseTurn=' ';
-	    }
-	    else if(isFull()){
-	     jlblStatus.setText("Draw!The game is over");
-	     whoseTurn=' ';
-	    }
-	    else {
-	     whoseTurn=(whoseTurn=='X')?'O':'X';
-	     jlblStatus.setText(whoseTurn+"'s turn");
-	    }
-	   }
 	  }
 	  
 	  public void mousePressed(MouseEvent e){
-	   
+		 
+		  
+		  if(token==' '&&whoseTurn!=' '){
+			    setToken(whoseTurn);
+			    if(isWin(whoseTurn)){
+			     jlblStatus.setText(whoseTurn+"win!The game is over");
+			     whoseTurn=' ';
+			
+			    }
+			    else if(isFull()){
+			     jlblStatus.setText("Draw!The game is over");
+			     whoseTurn=' ';
+			    }
+			    else {
+			     whoseTurn=(whoseTurn=='X')?'O':'X';
+			     jlblStatus.setText(whoseTurn+"'s turn");
+			    }
+		  }  
 	  }
 	  
 	       public void mouseReleased(MouseEvent e){
